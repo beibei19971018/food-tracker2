@@ -70,16 +70,9 @@ h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shad
 .panel-head .corner{font-size:12px;color:var(--sage);}
 .panel-head .corner b{color:var(--accent);font-weight:600;}
 
-.hero{position:relative;padding-top:14px;}
-.hero-ring-wrap{position:relative;width:172px;height:172px;margin:10px auto 6px;}
-.hero-ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
-.hero-num{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-family:'Space Grotesk',sans-serif;text-align:center;
-}
-.hero-num .n{font-size:38px;font-weight:600;line-height:1;letter-spacing:-0.01em;}
-.hero-num .u{font-size:12px;color:var(--sage);margin-top:6px;letter-spacing:.02em;}
-.hero-sub{text-align:center;color:var(--sage);font-size:12.5px;margin-top:2px;}
+.row{display:flex;justify-content:space-between;align-items:baseline;}
+.big{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;letter-spacing:-0.01em;}
+.hero-sub{color:var(--sage);font-size:12.5px;margin-top:2px;}
 
 .mini-row{display:flex;gap:10px;margin-top:16px;}
 .mini{flex:1;background:var(--panel-hi);border:1px solid var(--line);border-radius:16px;padding:12px 14px;}
@@ -89,6 +82,22 @@ h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shad
 .track>div{height:100%;border-radius:4px;background:var(--fern);}
 .track.water>div{background:#5f8f7a;}
 .track.over>div{background:var(--danger);}
+
+.panel.hero{
+  background:var(--accent);
+  border-color:rgba(255,255,255,0.14);
+  color:var(--paper);
+}
+.panel.hero .label{color:rgba(247,241,227,0.7);}
+.panel.hero .corner{color:rgba(247,241,227,0.7);}
+.panel.hero .corner b{color:var(--paper);}
+.panel.hero .big{color:var(--paper);}
+.panel.hero .hero-sub{color:rgba(247,241,227,0.7);}
+.panel.hero .track{background:rgba(255,255,255,0.2);}
+.panel.hero .track>div{background:var(--paper);}
+.panel.hero .track.water>div{background:#e7ecd8;}
+.panel.hero .track.over>div{background:#f3c9b8;}
+.panel.hero .quickrow button.secondary{background:rgba(255,255,255,0.14);color:var(--paper);border-color:rgba(255,255,255,0.18);}
 
 input[type=text],input[type=number]{
   width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--line);
@@ -170,30 +179,17 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
         <span class="label" id="dateLabel"></span>
         <span class="corner">已攝取 <b id="calEatenCorner">--</b> kcal</span>
       </div>
-      <div class="hero-ring-wrap">
-        <svg viewBox="0 0 172 172">
-          <circle cx="86" cy="86" r="76" fill="none" stroke="rgba(38,48,31,0.10)" stroke-width="10"/>
-          <circle id="calRing" cx="86" cy="86" r="76" fill="none" stroke="#5c7a3f" stroke-width="10" stroke-linecap="round" stroke-dasharray="477.5" stroke-dashoffset="477.5"/>
-        </svg>
-        <div class="hero-num">
-          <div class="n" id="calRemain">--</div>
-          <div class="u">kcal 剩餘</div>
-        </div>
-      </div>
-      <div class="hero-sub" id="calDetail">攝取 -- · 消耗 -- · 目標 --</div>
 
-      <div class="mini-row">
-        <div class="mini">
-          <div class="ml">蛋白質</div>
-          <div class="mn" id="proNum">-- g</div>
-          <div class="track"><div id="proTrack" style="width:0%"></div></div>
-        </div>
-        <div class="mini">
-          <div class="ml">💧 水分</div>
-          <div class="mn" id="waterNum">-- ml</div>
-          <div class="track water"><div id="waterTrack" style="width:0%"></div></div>
-        </div>
-      </div>
+      <div class="row" style="margin-top:6px;"><span>🔥 熱量</span><span class="big" id="calRemain">--</span></div>
+      <div class="hero-sub" id="calDetail">攝取 -- · 消耗 -- · 目標 --</div>
+      <div class="track"><div id="calTrack" style="width:0%"></div></div>
+
+      <div class="row" style="margin-top:16px;"><span>🍖 蛋白質</span><span class="big" id="proRemain">--</span></div>
+      <div class="track"><div id="proTrack" style="width:0%"></div></div>
+
+      <div class="row" style="margin-top:16px;"><span>💧 水分</span><span class="big" id="waterRemain">--</span></div>
+      <div class="track water"><div id="waterTrack" style="width:0%"></div></div>
+
       <div class="quickrow">
         <button class="secondary" data-add="250">+250ml</button>
         <button class="secondary" data-add="350">+350ml</button>
@@ -415,7 +411,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     render();
   });
 
-  const RING_CIRC = 2 * Math.PI * 76;
   function render(){
     const burned = day.exercises.reduce((s,e)=>s+(e.calories||0),0);
     const eaten = day.meals.reduce((s,m)=>s+(m.calories||0),0);
@@ -426,19 +421,18 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     const waterRemain = (target.water||2000) - water;
 
     $('#calEatenCorner').textContent = Math.round(eaten);
-    $('#calRemain').textContent = Math.abs(Math.round(calRemain));
+    $('#calRemain').textContent = (calRemain>=0?'剩 ':'超出 ')+Math.abs(Math.round(calRemain))+' kcal';
     $('#calDetail').textContent = `攝取 ${Math.round(eaten)} · 消耗 ${Math.round(burned)} · 目標 ${target.cal}`;
-    const calPct = Math.min(1, Math.max(0, (eaten-burned)/target.cal));
-    const ring = $('#calRing');
-    ring.setAttribute('stroke-dasharray', RING_CIRC.toFixed(1));
-    ring.setAttribute('stroke-dashoffset', (RING_CIRC*(1-calPct)).toFixed(1));
-    ring.setAttribute('stroke', (eaten-burned>target.cal) ? '#b0563c' : '#5c7a3f');
+    const calPct = Math.min(100, Math.max(0, ((eaten-burned)/target.cal)*100));
+    const calTrackEl = $('#calTrack');
+    calTrackEl.style.width = calPct+'%';
+    calTrackEl.parentElement.classList.toggle('over', eaten-burned > target.cal);
 
-    $('#proNum').textContent = Math.round(proEaten)+' / '+target.pro+'g';
+    $('#proRemain').textContent = (proRemain>=0?'剩 ':'超出 ')+Math.abs(Math.round(proRemain))+' g';
     const proPct = Math.min(100, Math.max(0,(proEaten/target.pro)*100));
     $('#proTrack').style.width = proPct+'%';
 
-    $('#waterNum').textContent = Math.round(water)+' / '+(target.water||2000)+'ml';
+    $('#waterRemain').textContent = (waterRemain>=0?'剩 ':'已達標 +')+Math.abs(Math.round(waterRemain))+' ml';
     const waterPct = Math.min(100, Math.max(0,(water/(target.water||2000))*100));
     $('#waterTrack').style.width = waterPct+'%';
 
