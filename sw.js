@@ -1,4 +1,4 @@
-const CACHE_NAME = 'food-tracker-v1';
+const CACHE_NAME = 'food-tracker-v2';
 const CORE_ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -17,24 +17,21 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// 網路優先：一律先試著抓最新版本，只有離線的時候才回退用快取
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  // 不快取 API 呼叫，永遠走網路
   if (url.pathname.startsWith('/.netlify/functions/')) return;
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const fetchPromise = fetch(event.request)
-        .then((resp) => {
-          if (resp && resp.status === 200) {
-            const clone = resp.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return resp;
-        })
-        .catch(() => cached);
-      return cached || fetchPromise;
-    })
+    fetch(event.request)
+      .then((resp) => {
+        if (resp && resp.status === 200) {
+          const clone = resp.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return resp;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
