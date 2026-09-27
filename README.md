@@ -20,7 +20,21 @@ netlify-food-tracker/
     └── analyze-exercise.js             運動熱量估算（呼叫 Groq API，免費）
 ```
 
-## 部署步驟
+## 你目前用的是 Cloudflare（不是 Netlify）
+
+如果你的網站是部署在 Cloudflare（Workers & Pages），後端函式改用 `/functions/analyze-exercise.js`
+（Cloudflare Pages Functions 格式），跟 `netlify/functions/` 那份是不同的東西，`netlify/functions/`
+可以留著不動，Cloudflare 不會讀到它。
+
+**設定金鑰（Cloudflare 版）：**
+1. 進入你的 Cloudflare 專案（Workers & Pages → food-tracker2）
+2. 點上方 **「Settings」**
+3. 找 **「Environment Variables」** 或 **「Variables and Secrets」**（新版介面可能改了名稱）
+4. Add variable：Name 填 `GROQ_API_KEY`，Value 貼上你的 Groq 金鑰，Type 選 **Secret**（比較安全，值不會顯示出來）
+5. 儲存後，回到 **「Deployments」** 頁籤，重新觸發一次部署（通常有 Retry deployment 之類的按鈕），環境變數才會生效
+
+## 之前的 README 內容（Netlify 版，如果之後想切回 Netlify 可參考）
+
 
 ### 1. 申請 Groq API 金鑰（完全免費，只有運動估算會用到）
 1. 到 https://console.groq.com 註冊/登入（不需要信用卡）

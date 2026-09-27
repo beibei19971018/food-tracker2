@@ -20,7 +20,7 @@ self.addEventListener('activate', (event) => {
 // 網路優先：一律先試著抓最新版本，只有離線的時候才回退用快取
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname.startsWith('/.netlify/functions/')) return;
+  if (url.pathname.startsWith('/.netlify/functions/') || url.pathname.startsWith('/analyze-')) return;
   if (event.request.method !== 'GET') return;
 
   event.respondWith(

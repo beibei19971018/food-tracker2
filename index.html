@@ -476,7 +476,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     btn.textContent = '估算中...'; btn.disabled = true;
     let entry = {name:text, minutes:null, calories:0};
     try{
-      const resp = await fetch('/.netlify/functions/analyze-exercise', {
+      const resp = await fetch('/analyze-exercise', {
         method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({text})
       });
