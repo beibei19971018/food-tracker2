@@ -18,7 +18,11 @@ async function handleAnalyzeExercise(request, env) {
     const apiKey = env.GROQ_API_KEY;
 
     if (!apiKey) {
-      return json({ error: 'missing_api_key', message: '尚未設定 GROQ_API_KEY 環境變數' }, 500);
+      return json({
+        error: 'missing_api_key',
+        message: '尚未設定 GROQ_API_KEY 環境變數',
+        visibleEnvNames: Object.keys(env || {})
+      }, 500);
     }
     if (!text) {
       return json({ error: 'missing_text' }, 400);
