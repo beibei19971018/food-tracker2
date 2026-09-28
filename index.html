@@ -26,6 +26,7 @@
   --line:rgba(38,48,31,0.14);
   --danger:#b0563c;
   --teal:#5f8f7a;
+  --accent-dk:#46612d;
   --font:'Futura','Futura-Medium','Jost','PingFang TC','Noto Sans TC',sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -44,12 +45,11 @@ body{
   background-attachment:fixed;
 }
 .wrap{max-width:480px;margin:0 auto;padding:20px 18px calc(96px + env(safe-area-inset-bottom,0px));}
-h1{
-  font-family:var(--font);
-  font-size:17px;font-weight:600;letter-spacing:.01em;margin:4px 0 18px;
-  display:flex;align-items:center;gap:8px;color:var(--ink);
-}
-h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+.brand{position:relative;margin:-20px -18px 18px;padding:34px 22px 24px;background:#efe8d9;}
+.brand h1{font-size:40px;line-height:1.02;font-weight:500;letter-spacing:-0.01em;color:#14180f;margin:0;}
+.brand .brandCn{position:absolute;right:22px;top:30px;font-size:34px;font-weight:600;line-height:1;letter-spacing:.02em;
+  color:rgba(255,255,255,0.45);-webkit-text-stroke:1.4px rgba(150,140,115,0.6);}
+.brand .tagline{margin:14px 0 0;font-size:21px;font-weight:500;color:#14180f;}
 
 .tabs{display:flex;gap:4px;padding:8px 0 16px;}
 .tab{flex:1;text-align:center;padding:9px 0;border-radius:99px;font-size:13px;letter-spacing:.02em;
@@ -121,20 +121,31 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .quickrow{display:flex;gap:8px;margin-top:10px;}
 .quickrow button{flex:1;}
 
-.handGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
-.handBtn{
+.foodTop{margin-top:6px;font-size:13.5px;font-weight:500;line-height:1.6;color:var(--accent-dk);}
+.nameRow{display:flex;align-items:center;gap:8px;margin-top:14px;padding:6px 8px 6px 16px;
+  border:1.5px solid var(--line);border-radius:18px;background:rgba(255,255,255,0.55);}
+.nameRow:focus-within{border-color:var(--accent);}
+.nameRow input[type=text]{flex:1;min-width:0;width:auto;margin:0;padding:10px 0;border:none;border-radius:0;
+  background:transparent;font-size:14px;text-overflow:ellipsis;}
+.nameRow input[type=text]:focus-visible{outline:none;}
+.stepper{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.stepBtn{width:30px;height:30px;padding:0;border-radius:9px;background:rgba(38,48,31,0.08);color:var(--ink);
+  font-size:18px;font-weight:500;line-height:1;display:flex;align-items:center;justify-content:center;}
+.stepBtn.plus{background:rgba(38,48,31,0.15);}
+.stepVal{min-width:46px;text-align:center;font-size:15px;font-weight:500;color:var(--accent-dk);white-space:nowrap;}
+.subLabel{margin:22px 0 10px;font-size:13.5px;font-weight:500;color:var(--ink);}
+.tileGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.tile{aspect-ratio:1/1;min-width:0;padding:4px 0;border-radius:16px;border:1px solid rgba(94,122,63,0.35);
+  background:rgba(255,255,255,0.5);color:var(--accent-dk);font-size:13px;font-weight:500;line-height:1.3;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  background:var(--panel-hi);border:1px solid var(--line);border-radius:16px;
-  padding:12px 4px;position:relative;cursor:pointer;
-}
-.handBtn .hIcon{font-size:22px;line-height:1;}
-.handBtn .hLabel{font-size:10px;color:var(--sage);}
-.handBtn .hCount{
-  position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:50%;
-  background:var(--accent);color:var(--paper);font-size:11px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;padding:0 4px;
-}
-.handSummary{margin-top:10px;font-size:13.5px;color:var(--ink);text-align:center;font-family:var(--font);}
+  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+.tile .ico{font-size:26px;line-height:1;}
+.tile .tn{font-size:12.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tile.empty{background:rgba(255,255,255,0.32);border-color:rgba(94,122,63,0.2);}
+.hr{height:1px;background:var(--line);margin:20px 0 0;}
+.estimate{margin-top:18px;padding:14px 16px;border-radius:99px;background:rgba(94,122,63,0.16);
+  color:var(--accent-dk);font-weight:600;font-size:14.5px;text-align:center;}
+#foodBtn{padding:15px 16px;font-size:15px;}
 
 .item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
 .item:last-child{border-bottom:none;}
@@ -166,7 +177,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 </head>
 <body>
 <div class="wrap">
-  <h1><span class="dot"></span>每日運動飲食紀錄</h1>
+  <header class="brand">
+    <div class="brandCn" aria-hidden="true">蛋營養</div>
+    <h1>EGG<br>IN YOUNG!</h1>
+    <p class="tagline">吃的營養，活的年輕！</p>
+  </header>
   <div class="tabs">
     <div class="tab active" data-tab="today">今天</div>
     <div class="tab" data-tab="history">歷史</div>
@@ -205,37 +220,24 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 
     <div class="panel">
       <div class="sectionTitle">🍽️ 食物</div>
-      <div class="label" style="margin-top:2px;">點一下手勢圖示快速估算，吃飯時間不用打字</div>
+      <div class="foodTop">1份＝1顆拳頭的量“✊”；0.5份＝半顆拳頭的量</div>
 
-      <div class="handGrid">
-        <button type="button" class="handBtn" data-cat="staple">
-          <span class="hIcon">✊</span><span class="hLabel">主食</span><span class="hCount" id="cnt-staple">0</span>
-        </button>
-        <button type="button" class="handBtn" data-cat="protein">
-          <span class="hIcon">🖐️</span><span class="hLabel">蛋白質</span><span class="hCount" id="cnt-protein">0</span>
-        </button>
-        <button type="button" class="handBtn" data-cat="veg">
-          <span class="hIcon">🤲</span><span class="hLabel">蔬菜</span><span class="hCount" id="cnt-veg">0</span>
-        </button>
-        <button type="button" class="handBtn" data-cat="fat">
-          <span class="hIcon">👍</span><span class="hLabel">油脂</span><span class="hCount" id="cnt-fat">0</span>
-        </button>
-        <button type="button" class="handBtn" data-cat="fruit">
-          <span class="hIcon">🍎</span><span class="hLabel">水果</span><span class="hCount" id="cnt-fruit">0</span>
-        </button>
-      </div>
-      <div class="label" style="margin-top:8px;">點圖示 +1 份，點右上角數字 -1 份</div>
-      <div class="handSummary" id="handSummary">尚未選擇</div>
-      <div class="quickrow">
-        <button class="secondary" id="handReset">清空</button>
-        <button id="handSave">記錄這一餐</button>
+      <div class="nameRow">
+        <input type="text" id="foodName" placeholder="食物名稱，例如：雞腿便當" autocomplete="off">
+        <div class="stepper">
+          <button type="button" class="stepBtn" data-step="-0.5" aria-label="減少半份">−</button>
+          <span class="stepVal" id="stepVal">1 ✊</span>
+          <button type="button" class="stepBtn plus" data-step="0.5" aria-label="增加半份">+</button>
+        </div>
       </div>
 
-      <div class="sectionTitle" style="margin-top:18px;">或手動輸入</div>
-      <input type="text" id="foodName" placeholder="食物名稱，例如：雞腿便當">
-      <input type="number" id="foodCal" placeholder="熱量 (kcal)">
-      <input type="number" id="foodPro" placeholder="蛋白質 (g)">
-      <input type="file" id="foodPhoto" accept="image/*" style="margin-top:8px;">
+      <div class="subLabel">快捷選取</div>
+      <div class="tileGrid" id="quickTiles"></div>
+      <div class="hr"></div>
+      <div class="subLabel">常用食物</div>
+      <div class="tileGrid" id="favTiles"></div>
+
+      <div class="estimate" id="estimate">這邊顯示試算的熱量及蛋白質</div>
       <button class="full" id="foodBtn">記錄食物</button>
       <div id="foodList"></div>
     </div>
@@ -428,7 +430,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     ).join('') || '<div class="muted">尚無紀錄</div>';
 
     $('#foodList').innerHTML = day.meals.map((m,i)=>
-      `<div class="item">${m.photo?`<img class="thumb" src="${m.photo}">`:''}<span class="name">${escapeHtml(m.name)}</span><span class="meta">${Math.round(m.calories)}kcal / ${Math.round(m.protein)}g<span class="del" data-type="food" data-i="${i}">刪除</span></span></div>`
+      `<div class="item">${m.photo?`<img class="thumb" src="${m.photo}">`:''}<span class="name">${escapeHtml(m.name)}${m.servings?` · ${fmt(m.servings)} ✊`:''}</span><span class="meta">${Math.round(m.calories)}kcal / ${fmt(m.protein)}g<span class="del" data-type="food" data-i="${i}">刪除</span></span></div>`
     ).join('') || '<div class="muted">尚無紀錄</div>';
   }
 
@@ -481,101 +483,167 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     render();
   });
 
-  // Food — hand-measurement quick entry
-  const HAND_UNITS = {
-    staple:  {label:'主食',   icon:'✊',  kcal:210, protein:4},
-    protein: {label:'蛋白質', icon:'🖐️', kcal:150, protein:25},
-    veg:     {label:'蔬菜',   icon:'🤲',  kcal:25,  protein:2},
-    fat:     {label:'油脂',   icon:'👍',  kcal:45,  protein:0},
-    fruit:   {label:'水果',   icon:'🍎',  kcal:70,  protein:1}
-  };
-  let handCounts = {staple:0, protein:0, veg:0, fat:0, fruit:0};
+  // Food — 拳頭份量 / 快捷選取 / 常用食物
+  const QUICK_FOODS = [
+    {name:'白飯', icon:'🍚', kcal:210, protein:4},
+    {name:'牛肉', icon:'🐂', kcal:260, protein:26},
+    {name:'蛋',   icon:'🥚', kcal:160, protein:13},
+    {name:'雞肉', icon:'🐓', kcal:180, protein:30},
+    {name:'地瓜', icon:'🍠', kcal:170, protein:2}
+  ]; // 每 1 份（1 顆拳頭的量）的熱量與蛋白質，想調整數字直接改這裡
 
-  function renderHand(){
-    let totalCal=0, totalPro=0, hasAny=false;
-    Object.keys(HAND_UNITS).forEach(k=>{
-      const c = handCounts[k]||0;
-      $('#cnt-'+k).textContent = c;
-      if(c>0){ hasAny=true; totalCal += c*HAND_UNITS[k].kcal; totalPro += c*HAND_UNITS[k].protein; }
-    });
-    $('#handSummary').textContent = hasAny
-      ? `約 ${Math.round(totalCal)} kcal · ${Math.round(totalPro)}g 蛋白質`
-      : '尚未選擇';
+  const fmt = n => String(Math.round(n*10)/10);
+  let foodServings = 1;
+  let favorites = loadJSON('favorites', []);      // [{name, servings, kcal, protein}]，最近用的在前面，最多 5 個
+  let estCache = loadJSON('foodEstimates', {});   // 名稱 -> {kcal, protein}（每 1 份，AI 估過的會記住）
+  let previewSeq = 0, previewTimer = null;
+
+  function lookupPer(name){
+    const q = QUICK_FOODS.find(f=>f.name===name);
+    if(q) return {kcal:q.kcal, protein:q.protein};
+    const fav = favorites.find(f=>f.name===name);
+    if(fav) return {kcal:fav.kcal, protein:fav.protein};
+    if(estCache[name]) return estCache[name];
+    return null;
   }
 
-  document.querySelectorAll('.handBtn').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      const cat = btn.dataset.cat;
-      if(e.target.classList.contains('hCount')){
-        handCounts[cat] = Math.max(0, (handCounts[cat]||0) - 1);
-      } else {
-        handCounts[cat] = (handCounts[cat]||0) + 1;
-      }
-      renderHand();
-    });
-  });
-
-  $('#handReset').addEventListener('click', ()=>{
-    Object.keys(handCounts).forEach(k=>handCounts[k]=0);
-    renderHand();
-  });
-
-  $('#handSave').addEventListener('click', ()=>{
-    const parts = []; let totalCal=0, totalPro=0;
-    Object.keys(HAND_UNITS).forEach(k=>{
-      const c = handCounts[k]||0;
-      if(c>0){
-        totalCal += c*HAND_UNITS[k].kcal;
-        totalPro += c*HAND_UNITS[k].protein;
-        parts.push(HAND_UNITS[k].icon+'×'+c);
-      }
-    });
-    if(parts.length===0){ toast('請先點選至少一項'); return; }
-    day.meals.push({name: parts.join(' '), calories: Math.round(totalCal), protein: Math.round(totalPro), photo:null});
-    saveDay();
-    Object.keys(handCounts).forEach(k=>handCounts[k]=0);
-    renderHand();
-    render();
-    toast('已記錄這一餐');
-  });
-
-  // Food — manual entry, optional local-only photo
-  function compressImage(file){
-    return new Promise((resolve, reject)=>{
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = ()=>{
-        const maxW = 240;
-        const scale = Math.min(1, maxW / img.width);
-        const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        URL.revokeObjectURL(url);
-        resolve(canvas.toDataURL('image/jpeg', 0.6));
-      };
-      img.onerror = reject;
-      img.src = url;
-    });
+  async function estimatePer(name){
+    try{
+      const resp = await fetch('/analyze-food', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({name})
+      });
+      const r = await resp.json();
+      if(!resp.ok || typeof r.calories !== 'number' || typeof r.protein !== 'number') throw r;
+      const per = {kcal:r.calories, protein:r.protein};
+      estCache[name] = per;
+      saveJSON('foodEstimates', estCache);
+      return per;
+    }catch(e){
+      console.error('food estimate failed', e);
+      return null;
+    }
   }
+
+  function showEstimate(text){ $('#estimate').textContent = text; }
+
+  function updatePreview(){
+    const name = $('#foodName').value.trim();
+    clearTimeout(previewTimer);
+    previewSeq++;
+    if(!name){ showEstimate('這邊顯示試算的熱量及蛋白質'); return; }
+    const per = lookupPer(name);
+    if(per){
+      showEstimate(`約 ${Math.round(per.kcal*foodServings)} kcal ・ 蛋白質 ${fmt(per.protein*foodServings)} g`);
+      return;
+    }
+    showEstimate('試算中…');
+    const seq = previewSeq;
+    previewTimer = setTimeout(async ()=>{
+      const est = await estimatePer(name);
+      if(seq !== previewSeq) return;   // 這段時間內使用者又改了內容，就不用理這次結果
+      if(est) updatePreview();
+      else showEstimate('無法試算，請稍後再試');
+    }, 700);
+  }
+
+  function renderStepper(){ $('#stepVal').textContent = fmt(foodServings) + ' ✊'; }
+
+  function renderTiles(){
+    $('#quickTiles').innerHTML = QUICK_FOODS.map((f,i)=>
+      `<button type="button" class="tile" data-quick="${i}"><span class="ico">${f.icon}</span><span>${f.name}</span></button>`
+    ).join('');
+    let html = '';
+    for(let i=0;i<5;i++){
+      const f = favorites[i];
+      html += f
+        ? `<button type="button" class="tile" data-fav="${i}"><span class="tn">${escapeHtml(f.name)}</span><span>${fmt(f.servings)}</span></button>`
+        : `<div class="tile empty"></div>`;
+    }
+    $('#favTiles').innerHTML = html;
+  }
+
+  document.querySelectorAll('[data-step]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      foodServings = Math.min(10, Math.max(0.5, foodServings + (+b.dataset.step)));
+      renderStepper();
+      updatePreview();
+    });
+  });
+  $('#foodName').addEventListener('input', updatePreview);
+
+  $('#quickTiles').addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-quick]');
+    if(!b) return;
+    $('#foodName').value = QUICK_FOODS[+b.dataset.quick].name;
+    updatePreview();
+  });
+
+  // 常用食物：點一下帶入名稱和份量；長按 0.7 秒移除
+  let pressTimer = null, longPressed = false;
+  const favBox = $('#favTiles');
+  favBox.addEventListener('contextmenu', e=>e.preventDefault());
+  favBox.addEventListener('pointerdown', (e)=>{
+    const b = e.target.closest('[data-fav]');
+    if(!b) return;
+    longPressed = false;
+    pressTimer = setTimeout(()=>{
+      const i = +b.dataset.fav, f = favorites[i];
+      if(!f) return;
+      longPressed = true;
+      favorites.splice(i,1);
+      saveJSON('favorites', favorites);
+      renderTiles();
+      toast(`已從常用食物移除「${f.name}」`);
+    }, 700);
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=> favBox.addEventListener(ev, ()=>clearTimeout(pressTimer)));
+  favBox.addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-fav]');
+    if(!b) return;
+    if(longPressed){ longPressed = false; return; }
+    const f = favorites[+b.dataset.fav];
+    if(!f) return;
+    $('#foodName').value = f.name;
+    foodServings = f.servings;
+    renderStepper();
+    updatePreview();
+  });
 
   $('#foodBtn').addEventListener('click', async ()=>{
     const name = $('#foodName').value.trim();
-    const cal = +$('#foodCal').value;
-    const pro = +$('#foodPro').value;
-    const file = $('#foodPhoto').files[0];
-    if(!name){ toast('請輸入食物名稱'); return; }
-    if(!cal && cal !== 0){ toast('請輸入熱量'); return; }
-    const entry = {name, calories: cal||0, protein: pro||0, photo:null};
-    if(file){
-      try{ entry.photo = await compressImage(file); }
-      catch(e){ console.error('image compress failed', e); }
+    if(!name){ toast('請先輸入或選擇食物'); return; }
+    const btn = $('#foodBtn'); const orig = btn.textContent;
+    let per = lookupPer(name);
+    if(!per){
+      btn.textContent = '試算中...'; btn.disabled = true;
+      per = await estimatePer(name);
+      btn.textContent = orig; btn.disabled = false;
     }
-    day.meals.push(entry);
+    const estimated = !!per;
+    if(!per){
+      per = {kcal:0, protein:0};
+      toast('這個食物暫時無法試算，先以 0 大卡記錄，可以刪除後再試一次');
+    }
+    day.meals.push({
+      name, servings: foodServings,
+      calories: Math.round(per.kcal*foodServings),
+      protein: Math.round(per.protein*foodServings*10)/10
+    });
     saveDay();
-    $('#foodName').value=''; $('#foodCal').value=''; $('#foodPro').value=''; $('#foodPhoto').value='';
-    render();
+    if(estimated){
+      favorites = favorites.filter(f=>!(f.name===name && f.servings===foodServings));
+      favorites.unshift({name, servings:foodServings, kcal:per.kcal, protein:per.protein});
+      favorites = favorites.slice(0,5);
+      saveJSON('favorites', favorites);
+    }
+    $('#foodName').value = '';
+    foodServings = 1;
+    renderStepper(); renderTiles(); updatePreview(); render();
   });
+
+  renderStepper();
+  renderTiles();
 
   // Delete
   document.addEventListener('click', (e)=>{
