@@ -38,7 +38,8 @@ async function handleAnalyzeExercise(request, env) {
       },
       body: JSON.stringify({
         model: 'openai/gpt-oss-120b',
-        max_tokens: 200,
+        max_completion_tokens: 1024,
+        reasoning_effort: 'low',
         messages: [{ role: 'user', content: prompt }]
       })
     });
