@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#f7f1e3;
@@ -26,6 +26,7 @@
   --line:rgba(38,48,31,0.14);
   --danger:#b0563c;
   --teal:#5f8f7a;
+  --font:'Futura','Futura-Medium','Jost','PingFang TC','Noto Sans TC',sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -34,7 +35,7 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
 body{
   margin:0;min-height:100vh;color:var(--ink);
-  font-family:'Manrope',-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
+  font-family:var(--font);
   background:
     radial-gradient(ellipse 85% 50% at 15% -6%, rgba(124,154,94,0.28), transparent 60%),
     radial-gradient(ellipse 75% 55% at 104% 12%, rgba(63,92,58,0.20), transparent 65%),
@@ -44,14 +45,13 @@ body{
 }
 .wrap{max-width:480px;margin:0 auto;padding:20px 18px calc(96px + env(safe-area-inset-bottom,0px));}
 h1{
-  font-family:'Space Grotesk',sans-serif;
+  font-family:var(--font);
   font-size:17px;font-weight:600;letter-spacing:.01em;margin:4px 0 18px;
   display:flex;align-items:center;gap:8px;color:var(--ink);
 }
 h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
 
-.tabs{display:flex;gap:4px;position:sticky;top:env(safe-area-inset-top,0px);padding:8px 0 16px;z-index:5;
-  background:linear-gradient(var(--paper) 60%, transparent);}
+.tabs{display:flex;gap:4px;padding:8px 0 16px;}
 .tab{flex:1;text-align:center;padding:9px 0;border-radius:99px;font-size:13px;letter-spacing:.02em;
   cursor:pointer;color:var(--sage);transition:color .2s;}
 .tab.active{color:var(--paper);background:var(--accent);font-weight:600;}
@@ -71,12 +71,12 @@ h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shad
 .panel-head .corner b{color:var(--accent);font-weight:600;}
 
 .row{display:flex;justify-content:space-between;align-items:baseline;}
-.big{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;letter-spacing:-0.01em;}
+.big{font-family:var(--font);font-size:24px;font-weight:600;letter-spacing:-0.01em;}
 .hero-sub{color:var(--sage);font-size:12.5px;margin-top:2px;}
 
 .mini-row{display:flex;gap:10px;margin-top:16px;}
 .mini{flex:1;background:var(--panel-hi);border:1px solid var(--line);border-radius:16px;padding:12px 14px;}
-.mini .mn{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;}
+.mini .mn{font-family:var(--font);font-size:19px;font-weight:600;}
 .mini .ml{font-size:11.5px;color:var(--sage);margin-top:2px;}
 .track{height:5px;border-radius:4px;background:rgba(38,48,31,0.10);overflow:hidden;margin-top:9px;}
 .track>div{height:100%;border-radius:4px;background:var(--fern);}
@@ -102,16 +102,16 @@ h1 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shad
 input[type=text],input[type=number]{
   width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--line);
   background:rgba(255,255,255,0.55);color:var(--ink);font-size:14px;margin-top:8px;
-  font-family:'Manrope',sans-serif;
+  font-family:var(--font);
 }
 input::placeholder{color:rgba(38,48,31,0.38);}
 select.selectlike{
   width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--line);
-  background:rgba(255,255,255,0.55);color:var(--ink);font-size:14px;margin-top:8px;font-family:'Manrope',sans-serif;
+  background:rgba(255,255,255,0.55);color:var(--ink);font-size:14px;margin-top:8px;font-family:var(--font);
 }
 button{
   border:none;border-radius:99px;padding:12px 16px;font-size:14px;font-weight:600;
-  cursor:pointer;background:var(--accent);color:var(--paper);font-family:'Manrope',sans-serif;
+  cursor:pointer;background:var(--accent);color:var(--paper);font-family:var(--font);
 }
 button.secondary{background:var(--panel-hi);color:var(--ink);border:1px solid var(--line);}
 button.full{width:100%;margin-top:10px;}
@@ -134,7 +134,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
   background:var(--accent);color:var(--paper);font-size:11px;font-weight:700;
   display:flex;align-items:center;justify-content:center;padding:0 4px;
 }
-.handSummary{margin-top:10px;font-size:13.5px;color:var(--ink);text-align:center;font-family:'Space Grotesk',sans-serif;}
+.handSummary{margin-top:10px;font-size:13.5px;color:var(--ink);text-align:center;font-family:var(--font);}
 
 .item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
 .item:last-child{border-bottom:none;}
@@ -149,7 +149,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 @keyframes sp{to{transform:rotate(360deg);}}
 @media (prefers-reduced-motion: reduce){ .spin{animation:none;} }
 
-.sectionTitle{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px;}
+.sectionTitle{font-family:var(--font);font-size:14px;font-weight:600;margin-bottom:2px;}
 .chartWrap{margin-top:12px;}
 .chartLegend{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sage);margin-bottom:2px;}
 .legendDot{width:7px;height:7px;border-radius:50%;}
@@ -184,16 +184,15 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
       <div class="hero-sub" id="calDetail">攝取 -- · 消耗 -- · 目標 --</div>
       <div class="track"><div id="calTrack" style="width:0%"></div></div>
 
-      <div class="row" style="margin-top:16px;"><span>🍖 蛋白質</span><span class="big" id="proRemain">--</span></div>
+      <div class="row" style="margin-top:16px;"><span>🥩 蛋白質</span><span class="big" id="proRemain">--</span></div>
       <div class="track"><div id="proTrack" style="width:0%"></div></div>
 
       <div class="row" style="margin-top:16px;"><span>💧 水分</span><span class="big" id="waterRemain">--</span></div>
       <div class="track water"><div id="waterTrack" style="width:0%"></div></div>
 
       <div class="quickrow">
-        <button class="secondary" data-add="250">+250ml</button>
-        <button class="secondary" data-add="350">+350ml</button>
-        <button class="secondary" data-add="500">+500ml</button>
+        <button class="secondary" data-add="-100">-100ml</button>
+        <button class="secondary" data-add="100">+100ml</button>
       </div>
     </div>
 
@@ -309,14 +308,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
       <button class="full" id="saveTarget">儲存目標</button>
       <div class="label" id="saveMsg" style="margin-top:8px;"></div>
     </div>
-    <div class="panel">
-      <div class="sectionTitle">說明</div>
-      <div class="label" style="margin-top:8px;line-height:1.7;">
-      ・運動估算透過 AI（Anthropic API）；食物改為手動輸入，完全免費。<br>
-      ・資料儲存在這台裝置的瀏覽器裡，不會同步到雲端。<br>
-      ・照片只作為個人備忘，不會上傳分析。
-      </div>
-    </div>
   </div>
 </div>
 <div id="toast" class="hidden"></div>
@@ -372,10 +363,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
       $('#goal').value = profile.goal||'maintain';
     }
     render();
-    if(!hasTarget){
-      document.querySelector('.tab[data-tab="settings"]').click();
-      $('#calcResult').innerHTML = '<span style="color:var(--accent)">👋 第一次使用，先填寫個人資料計算你的每日目標吧！</span>';
-    }
   }
 
   $('#calcBtn').addEventListener('click', ()=>{
@@ -462,7 +449,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
   // Water quick add
   document.querySelectorAll('[data-add]').forEach(b=>{
     b.addEventListener('click', ()=>{
-      day.water = (day.water||0) + (+b.dataset.add);
+      day.water = Math.max(0, (day.water||0) + (+b.dataset.add));
       saveDay();
       render();
     });
