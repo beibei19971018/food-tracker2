@@ -45,11 +45,12 @@ body{
   background-attachment:fixed;
 }
 .wrap{max-width:480px;margin:0 auto;padding:20px 18px calc(96px + env(safe-area-inset-bottom,0px));}
-.brand{position:relative;margin:-20px -18px 18px;padding:34px 22px 24px;background:#efe8d9;}
-.brand h1{font-size:40px;line-height:1.02;font-weight:500;letter-spacing:-0.01em;color:#14180f;margin:0;}
-.brand .brandCn{position:absolute;right:22px;top:30px;font-size:34px;font-weight:600;line-height:1;letter-spacing:.02em;
-  color:rgba(255,255,255,0.45);-webkit-text-stroke:1.4px rgba(150,140,115,0.6);}
-.brand .tagline{margin:14px 0 0;font-size:21px;font-weight:500;color:#14180f;}
+.brand{position:relative;margin:0 0 22px;padding:14px 4px 0;}
+.brand .logo{display:block;max-width:78%;height:auto;}
+.brand .brandCn{position:absolute;right:4px;top:6px;display:flex;flex-direction:column;gap:4px;align-items:center;}
+.brand .brandCn span{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--paper);
+  font-size:16px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;}
+.brand .tagline{margin:14px 0 0;font-size:21px;font-weight:400;color:#14180f;}
 
 .tabs{display:flex;gap:4px;padding:8px 0 16px;}
 .tab{flex:1;text-align:center;padding:9px 0;border-radius:99px;font-size:13px;letter-spacing:.02em;
@@ -71,12 +72,12 @@ body{
 .panel-head .corner b{color:var(--accent);font-weight:600;}
 
 .row{display:flex;justify-content:space-between;align-items:baseline;}
-.big{font-family:var(--font);font-size:24px;font-weight:600;letter-spacing:-0.01em;}
+.big{font-family:var(--font);font-size:24px;font-weight:500;letter-spacing:0.01em;}
 .hero-sub{color:var(--sage);font-size:12.5px;margin-top:2px;}
 
 .mini-row{display:flex;gap:10px;margin-top:16px;}
 .mini{flex:1;background:var(--panel-hi);border:1px solid var(--line);border-radius:16px;padding:12px 14px;}
-.mini .mn{font-family:var(--font);font-size:19px;font-weight:600;}
+.mini .mn{font-family:var(--font);font-size:19px;font-weight:500;letter-spacing:0.01em;}
 .mini .ml{font-size:11.5px;color:var(--sage);margin-top:2px;}
 .track{height:5px;border-radius:4px;background:rgba(38,48,31,0.10);overflow:hidden;margin-top:9px;}
 .track>div{height:100%;border-radius:4px;background:var(--fern);}
@@ -132,7 +133,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .stepBtn{width:30px;height:30px;padding:0;border-radius:9px;background:rgba(38,48,31,0.08);color:var(--ink);
   font-size:18px;font-weight:500;line-height:1;display:flex;align-items:center;justify-content:center;}
 .stepBtn.plus{background:rgba(38,48,31,0.15);}
-.stepVal{min-width:46px;text-align:center;font-size:15px;font-weight:500;color:var(--accent-dk);white-space:nowrap;}
+.stepVal{min-width:46px;text-align:center;font-size:15px;font-weight:400;color:var(--accent-dk);white-space:nowrap;letter-spacing:0.01em;}
 .subLabel{margin:22px 0 10px;font-size:13.5px;font-weight:500;color:var(--ink);}
 .tileGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
 .tile{aspect-ratio:1/1;min-width:0;padding:4px 0;border-radius:16px;border:1px solid rgba(94,122,63,0.35);
@@ -178,8 +179,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 <body>
 <div class="wrap">
   <header class="brand">
-    <div class="brandCn" aria-hidden="true">蛋營養</div>
-    <h1>EGG<br>IN YOUNG!</h1>
+    <div class="brandCn" aria-hidden="true"><span>蛋</span><span>營</span><span>養</span></div>
+    <img class="logo" src="/assets/logo.png" alt="Egg in young!">
     <p class="tagline">吃的營養，活的年輕！</p>
   </header>
   <div class="tabs">
@@ -237,7 +238,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
       <div class="subLabel">常用食物</div>
       <div class="tileGrid" id="favTiles"></div>
 
-      <div class="estimate" id="estimate">這邊顯示試算的熱量及蛋白質</div>
+      <div class="estimate" id="estimate">食物試算結果</div>
       <button class="full" id="foodBtn">記錄食物</button>
       <div id="foodList"></div>
     </div>
@@ -531,7 +532,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     const name = $('#foodName').value.trim();
     clearTimeout(previewTimer);
     previewSeq++;
-    if(!name){ showEstimate('這邊顯示試算的熱量及蛋白質'); return; }
+    if(!name){ showEstimate('食物試算結果'); return; }
     const per = lookupPer(name);
     if(per){
       showEstimate(`約 ${Math.round(per.kcal*foodServings)} kcal ・ 蛋白質 ${fmt(per.protein*foodServings)} g`);
