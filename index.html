@@ -68,9 +68,24 @@ body{
   -webkit-backdrop-filter:blur(18px);
 }
 .label{color:var(--sage);font-size:12px;letter-spacing:.02em;}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.panel-head{display:flex;justify-content:flex-end;align-items:baseline;margin:10px 0 4px;}
 .panel-head .corner{font-size:12px;color:var(--sage);}
 .panel-head .corner b{color:var(--accent);font-weight:600;}
+
+.dateStrip{display:flex;justify-content:space-between;gap:2px;}
+.dateCell{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 0;
+  border-radius:14px;background:transparent;color:inherit;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+.dateCell .dw{font-size:11.5px;font-weight:500;color:var(--sage);}
+.dateCell .dn{font-size:16px;font-weight:500;color:var(--ink);}
+.dateCell.today{background:rgba(38,48,31,0.08);}
+.dateCell.today .dw,.dateCell.today .dn{color:var(--ink);font-weight:700;}
+.dateCell.future{opacity:.35;}
+.dateCell.selected:not(.today){background:rgba(38,48,31,0.06);}
+.panel.hero .dateCell .dw{color:rgba(247,241,227,0.55);}
+.panel.hero .dateCell .dn{color:rgba(247,241,227,0.85);}
+.panel.hero .dateCell.today{background:rgba(255,255,255,0.16);}
+.panel.hero .dateCell.today .dw,.panel.hero .dateCell.today .dn{color:var(--paper);}
+.panel.hero .dateCell.selected:not(.today){background:rgba(255,255,255,0.1);}
 
 .row{display:flex;justify-content:space-between;align-items:baseline;}
 .big{font-family:var(--font);font-size:24px;font-weight:500;letter-spacing:0.01em;}
@@ -193,8 +208,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 
   <div id="tab-today">
     <div class="panel hero">
+      <div class="dateStrip" id="dateStrip"></div>
       <div class="panel-head">
-        <span class="label" id="dateLabel"></span>
         <span class="corner">已攝取 <b id="calEatenCorner">--</b> kcal</span>
       </div>
 
@@ -327,8 +342,45 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     const d = new Date();
     return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   };
-  const DATE = todayStr();
-  $('#dateLabel').textContent = DATE;
+  const TODAY = todayStr();
+  let DATE = TODAY;   // 目前檢視/記錄的日期，預設是今天
+  const WEEKDAYS = ['日','一','二','三','四','五','六'];
+  const dateToStr = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+  function renderDateStrip(){
+    const base = new Date(TODAY+'T00:00:00');
+    let html = '';
+    for(let off=-2; off<=2; off++){
+      const d = new Date(base);
+      d.setDate(d.getDate()+off);
+      const str = dateToStr(d);
+      const isToday = str === TODAY;
+      const isFuture = str > TODAY;
+      const isSelected = str === DATE;
+      const cls = ['dateCell'];
+      if(isToday) cls.push('today');
+      if(isFuture) cls.push('future');
+      if(isSelected) cls.push('selected');
+      html += `<button type="button" class="${cls.join(' ')}" data-date="${str}" ${isFuture?'disabled':''}>` +
+              `<span class="dw">${WEEKDAYS[d.getDay()]}</span><span class="dn">${d.getDate()}</span></button>`;
+    }
+    $('#dateStrip').innerHTML = html;
+  }
+
+  function switchDate(str){
+    if(str === DATE) return;
+    DATE = str;
+    day = loadJSON('day_'+DATE, {date:DATE, exercises:[], meals:[], water:0});
+    if(day.water==null) day.water = 0;
+    renderDateStrip();
+    render();
+  }
+
+  $('#dateStrip').addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-date]');
+    if(!b || b.disabled) return;
+    switchDate(b.dataset.date);
+  });
 
   const PREFIX = 'fittrack_';
   function loadJSON(key, fallback){
@@ -350,11 +402,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
   }
 
   let day = loadJSON('day_'+DATE, {date:DATE, exercises:[], meals:[], water:0});
+  renderDateStrip();
   let target = loadJSON('target', {cal:2000, pro:100, water:2000});
   let profile = loadJSON('profile', null);
   let hasTarget = !!loadJSON('target', null);
 
   function saveDay(){ day.date = DATE; saveJSON('day_'+DATE, day); }
+  function isToday(){ return DATE === TODAY; }
   function saveTarget(){ saveJSON('target', target); hasTarget = true; }
   function saveProfile(p){ profile = p; saveJSON('profile', p); }
 
