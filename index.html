@@ -124,6 +124,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 .quickrow button{flex:1;}
 
 .foodTop{margin-top:6px;font-size:13.5px;font-weight:500;line-height:1.6;color:var(--accent-dk);}
+.manualHint{margin-top:6px;font-size:12px;color:var(--sage);}
 .nameRow{display:flex;align-items:center;gap:8px;margin-top:14px;padding:6px 8px 6px 16px;
   border:1.5px solid var(--line);border-radius:18px;background:rgba(255,255,255,0.55);}
 .nameRow:focus-within{border-color:var(--accent);}
@@ -202,9 +203,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
       <div class="track"><div id="calTrack" style="width:0%"></div></div>
 
       <div class="row" style="margin-top:16px;"><span>🥩 蛋白質</span><span class="big" id="proRemain">--</span></div>
+      <div class="hero-sub" id="proDetail">攝取 -- · 目標 --</div>
       <div class="track"><div id="proTrack" style="width:0%"></div></div>
 
       <div class="row" style="margin-top:16px;"><span>💧 水分</span><span class="big" id="waterRemain">--</span></div>
+      <div class="hero-sub" id="waterDetail">攝取 -- · 目標 --</div>
       <div class="track water"><div id="waterTrack" style="width:0%"></div></div>
 
       <div class="quickrow">
@@ -215,7 +218,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 
     <div class="panel">
       <div class="sectionTitle">🏃 運動</div>
-      <input type="text" id="exInput" placeholder="例如：跑步 30 分鐘、重訓一小時">
+      <input type="text" id="exInput" placeholder="例如：跑步 30 分鐘、重訓一小時、臀推10下五組">
       <button class="full" id="exBtn">記錄運動</button>
       <div id="exList"></div>
     </div>
@@ -232,6 +235,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
           <button type="button" class="stepBtn plus" data-step="0.5" aria-label="增加半份">+</button>
         </div>
       </div>
+      <div class="manualHint">也可手動填上數值：熱量100 蛋白質50</div>
 
       <div class="subLabel">快捷選取</div>
       <div class="tileGrid" id="quickTiles"></div>
@@ -420,10 +424,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
     calTrackEl.parentElement.classList.toggle('over', eaten-burned > target.cal);
 
     $('#proRemain').textContent = (proRemain>=0?'剩 ':'超出 ')+Math.abs(Math.round(proRemain))+' g';
+    $('#proDetail').textContent = `攝取 ${Math.round(proEaten)} · 目標 ${target.pro}`;
     const proPct = Math.min(100, Math.max(0,(proEaten/target.pro)*100));
     $('#proTrack').style.width = proPct+'%';
 
     $('#waterRemain').textContent = (waterRemain>=0?'剩 ':'已達標 +')+Math.abs(Math.round(waterRemain))+' ml';
+    $('#waterDetail').textContent = `攝取 ${Math.round(water)} · 目標 ${target.water||2000}`;
     const waterPct = Math.min(100, Math.max(0,(water/(target.water||2000))*100));
     $('#waterTrack').style.width = waterPct+'%';
 
@@ -529,11 +535,27 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
 
   function showEstimate(text){ $('#estimate').textContent = text; }
 
+  // 從輸入框文字裡解析手動填的數值，例如「雞腿便當 熱量600 蛋白質40」
+  // 支援「熱量」「卡路里」「kcal」和「蛋白質」「protein」，順序不拘、有無冒號空格都可以
+  function parseManual(text){
+    const kcalM = text.match(/(?:熱量|卡路里|kcal)\s*[:：]?\s*(\d+(?:\.\d+)?)/i);
+    const proM = text.match(/(?:蛋白質|protein)\s*[:：]?\s*(\d+(?:\.\d+)?)/i);
+    if(!kcalM || !proM) return null;
+    let name = text
+      .replace(kcalM[0], '')
+      .replace(proM[0], '')
+      .replace(/[，,、]/g, ' ')
+      .trim() || '食物';
+    return { name, calories: parseFloat(kcalM[1]), protein: parseFloat(proM[1]) };
+  }
+
   function updatePreview(){
     const name = $('#foodName').value.trim();
     clearTimeout(previewTimer);
     previewSeq++;
     if(!name){ showEstimate('食物試算結果'); return; }
+    const manual = parseManual(name);
+    if(manual){ showEstimate(`手動輸入：${manual.calories} kcal ・ 蛋白質 ${fmt(manual.protein)} g`); return; }
     const per = lookupPer(name);
     if(per){
       showEstimate(`約 ${Math.round(per.kcal*foodServings)} kcal ・ 蛋白質 ${fmt(per.protein*foodServings)} g`);
@@ -613,8 +635,18 @@ button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visi
   });
 
   $('#foodBtn').addEventListener('click', async ()=>{
-    const name = $('#foodName').value.trim();
-    if(!name){ toast('請先輸入或選擇食物'); return; }
+    const rawName = $('#foodName').value.trim();
+    if(!rawName){ toast('請先輸入或選擇食物'); return; }
+    const manual = parseManual(rawName);
+    if(manual){
+      day.meals.push({ name: manual.name, servings: null, calories: Math.round(manual.calories), protein: Math.round(manual.protein*10)/10 });
+      saveDay();
+      $('#foodName').value = '';
+      foodServings = 1;
+      renderStepper(); renderTiles(); updatePreview(); render();
+      return;
+    }
+    const name = rawName;
     const btn = $('#foodBtn'); const orig = btn.textContent;
     let per = lookupPer(name);
     if(!per){
