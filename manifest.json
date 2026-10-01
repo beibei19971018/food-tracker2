@@ -1,6 +1,6 @@
 {
-  "name": "每日運動飲食紀錄",
-  "short_name": "飲食紀錄",
+  "name": "蛋營養",
+  "short_name": "蛋營養",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
